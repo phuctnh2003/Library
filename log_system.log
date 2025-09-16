@@ -1,0 +1,4 @@
+Time: 2025-08-31 16:12:22 | Exception:java.sql.SQLException: Incorrect string value: '\xE1\xBB\x85n T...' for column 'name' at row 1
+Time: 2025-08-31 16:12:40 | Exception:java.sql.SQLException: Incorrect string value: '\xE1\xBB\x85n T...' for column 'name' at row 1
+Time: 2025-08-31 16:15:15 | Exception:java.sql.SQLException: Access denied for user 'kietnt'@'27.64.56.250' (using password: YES)
+Time: 2025-08-31 16:20:23 | Exception:java.sql.SQLException: Access denied for user 'kietnt'@'27.64.56.250' (using password: YES)

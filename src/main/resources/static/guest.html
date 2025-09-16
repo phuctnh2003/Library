@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Guest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f5f5f5; /* Màu kem sáng */
+    }
+   .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Căn giữa nội dung của header theo chiều dọc */
+    width: 100%;
+    padding: 4px;
+    background-color: #2c3e50;
+    color: white;
+    height: 80px; /* Giới hạn chiều cao header */
+}
+
+.logo {
+    display: flex;
+    align-items: center; /* Căn giữa logo và chữ NEO-LIBRARY theo chiều dọc */
+    padding-left: 15px; /* Thêm padding trái để xích vào trong */
+    height: 100%; /* Đảm bảo logo không làm tăng chiều cao header */
+}
+
+.logo img {
+    width: 250px; /* Đặt chiều rộng logo */
+    height: auto; /* Giữ tỷ lệ của logo */
+    max-height: 300px; /* Giới hạn chiều cao của logo */
+ margin-right: 400px;
+}
+.logo-text {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+   .search-bar {
+  margin: 20px 0;
+  display: flex;
+  align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+  justify-content: center;
+}
+
+.search-bar input {
+  padding: 10px;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.search-bar button {
+  margin-left: 10px; /* Khoảng cách giữa các button */
+  padding: 10px 20px;
+  border: none;
+  background-color: #27ae60;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.search-bar button:hover {
+  background-color: #2ecc71;
+}
+.search-bar select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  margin-left: 10px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+.search-bar select:focus {
+  outline: none;
+  border-color: #27ae60;
+}
+
+
+    .right-menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Căn phải các phần tử trong .right-menu */
+    padding-right: 20px; /* Thêm khoảng cách nhỏ từ bên phải để giữ khoảng cách */
+}
+
+.right-menu button, .right-menu img {
+    margin-left: 15px; /* Giảm margin-left giữa các phần tử */
+}
+
+.logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+    .user-icon {
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+    .user-info {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 20px;
+        background: white;
+        color: black;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 200px;
+    }
+    .book-list {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 80%;
+        margin-bottom: 60px;
+    }
+    .book-item {
+        width: 200px;
+        margin: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 15px;
+
+    }
+    .book-item img {
+        width: 100px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    /* Modal style */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    .modal-content {
+        background: white;
+        padding: 20px;
+        width: 400px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .modal-content input {
+        width: 100%;
+        margin: 10px 0;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .modal-content button {
+        background-color: #27ae60;
+        color: white;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .modal-content button.cancel {
+        background-color: #e74c3c;
+    }
+    /* Panel mô tả */
+    .description-panel {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #f9f9f9;
+        padding: 20px;
+        width: 80%;
+        max-width: 600px;
+        height: 300px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        overflow-y: auto; /* Scrollable content */
+        background-color: #fff; /* Light background color */
+        border: 1px solid #ddd; /* Soft border */
+    }
+
+    .description-panel .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #e74c3c;
+        cursor: pointer;
+        background: none;
+        border: none;
+    }
+
+    .description-panel h3 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    .description-panel p {
+        color: #666;
+        line-height: 1.5;
+    }
+    .history-panel {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+}
+
+.history-panel .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #e74c3c;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+#history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#history-table th, #history-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#history-table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+.right-menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-right: 20px;
+}
+
+.right-menu button {
+    background-color: #3498db;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.right-menu button:hover {
+    background-color: #2980b9;
+}
+
+ footer {
+        background-color: #34495e;
+        color: white;
+        text-align: center;
+        font-size: 13px;
+        width: 100%;
+        padding: 3px;
+        position: fixed;
+        bottom: 0; /* Giữ footer ở dưới cùng */
+        left: 0; /* Đảm bảo footer phủ rộng toàn bộ màn hình */
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <img src="NEOSOFT-LOGO-LIB.png" alt="Library">
+    <span class="logo-text">Library Guest</span>
+  </div>
+  <div class="right-menu">
+    <select id="language-select" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+    <button onclick="redirectToLogin()">Login</button>
+    <button onclick="redirectToLogin()">Register</button>
+  </div>
+
+</div>
+
+<div class="search-bar">
+  <input type="text" id="search-input" placeholder="Search books by title..." oninput="searchBooks()">
+  <select id="category-select" onchange="filterByCategory()">
+    <option value="">-- Select Category --</option>
+  </select>
+</div>
+
+
+<div class="book-list" id="book-list">
+  <!-- Sách sẽ được load ở đây -->
+</div>
+
+<!-- Modal mượn sách -->
+<div id="borrow-modal" class="modal">
+  <div class="modal-content">
+    <h3>Borrow Book</h3>
+    <input type="text" id="borrow-book_id" placeholder="Book ID" disabled>
+    <button onclick="saveBorrow()">Borrow</button>
+    <button class="cancel" onclick="closeBorrowModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- Panel mô tả sách -->
+<div id="description-panel" class="description-panel">
+  <button class="close-btn" onclick="closeDescriptionPanel()">×</button>
+  <h3>Book Description</h3>
+  <p id="book-description"></p>
+</div>
+
+<footer>
+  <p>© 2024 Library. All rights reserved.</p>
+</footer>
+<script>
+  // Tải danh sách sách từ server
+ async function loadBooks() {
+   const response = await fetch('/admin/show');
+   const books = await response.json();
+
+   const bookList = document.getElementById('book-list');
+   bookList.innerHTML = ''; // Xóa danh sách cũ
+   const lang = document.getElementById('language-select').value; // Ngôn ngữ hiện tại
+   const langData = translations[lang]; // Dữ liệu ngôn ngữ
+
+   books.forEach(book => {
+       const bookItem = document.createElement('div');
+       bookItem.classList.add('book-item');
+       bookItem.innerHTML = `
+         <img src="${book.image}" alt="${book.title}" loading="lazy">
+
+           <h3>${book.title}</h3>
+           <p><b>ID:</b> ${book.id}</p>
+           <p><b>${langData.author}:</b> ${book.author}</p>
+           <p><b>${langData.views}:</b> ${book.viewers}</p>
+           <button onclick="openBorrowModal(${book.id})">
+             <i class="fas fa-book-reader"></i> ${langData.borrow}
+           </button>
+           <button class="description-button" onclick="viewDescription('${book.title}')">
+             <i class="fas fa-book-open"></i> ${langData.description}
+           </button>
+       `;
+       bookList.appendChild(bookItem);
+   });
+}
+
+
+// Tải danh sách thể loại từ server
+async function loadCategories() {
+    const response = await fetch('/admin/category');
+    const categories = await response.json();
+
+    const categorySelect = document.getElementById('category-select');
+    const lang = document.getElementById('language-select').value; // Ngôn ngữ hiện tại
+    const langData = translations[lang]; // Dữ liệu ngôn ngữ
+
+    categorySelect.innerHTML = ''; // Xóa các tùy chọn cũ
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = langData.categoryPlaceholder;
+    categorySelect.appendChild(defaultOption);
+
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+    });
+}
+
+
+// Gọi hàm này khi trang được tải
+document.addEventListener('DOMContentLoaded', () => {
+    loadBooks();
+    loadCategories();
+});
+
+
+
+ // Hiển thị mô tả sách
+ function viewDescription(title) {
+    // Gửi yêu cầu tăng lượt xem
+    fetch(`/admin/increase-view`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ title: title, status: true }) // status: true để tăng lượt xem
+    })
+    .then(response => response.text())
+    .then(result => {
+        if (result === '200') {
+            // Gửi thêm yêu cầu lấy thông tin sách và hiển thị mô tả
+            fetch(`/admin/search?title=${title}`)
+                .then(response => response.json())
+                .then(book => {
+                    document.getElementById('book-description').innerText = book[0].description;
+                    document.getElementById('description-panel').style.display = 'block';
+
+                });
+        } else {
+            alert('Failed to update viewers.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+window.onload = function() {
+    loadBooks();
+    loadCategories();
+};
+
+ // Đóng panel mô tả
+ function closeDescriptionPanel() {
+   document.getElementById('description-panel').style.display = 'none';
+ }
+
+async function filterByCategory() {
+    const selectedCategory = document.getElementById('category-select').value;
+    const searchInput = document.getElementById('search-input').value;
+
+    // Lấy ngôn ngữ hiện tại
+    const lang = document.getElementById('language-select').value;
+    const langData = translations[lang];
+
+    // Tạo URL tìm kiếm
+    const query = selectedCategory || searchInput;
+    if (!query) {
+        loadBooks(); // Nếu không có tiêu chí tìm kiếm, hiển thị tất cả sách
+        return;
+    }
+
+    const response = await fetch(`/admin/search?title=${query}`);
+    const books = await response.json();
+
+    const bookList = document.getElementById('book-list');
+    bookList.innerHTML = ''; // Xóa danh sách cũ
+
+    if (books.length > 0) {
+        books.forEach(book => {
+            const bookItem = document.createElement('div');
+            bookItem.classList.add('book-item');
+            bookItem.innerHTML = `
+               <img src="${book.image}" alt="${book.title}" loading="lazy">
+
+                <h3>${book.title}</h3>
+                <p><b>ID:</b> ${book.id}</p>
+                <p><b>${langData.author}:</b> ${book.author}</p>
+                <p><b>${langData.views}:</b> ${book.viewers}</p>
+                <button onclick="openBorrowModal(${book.id})">
+                    <i class="fas fa-book-reader"></i> ${langData.borrow}
+                </button>
+                <button class="description-button" onclick="viewDescription('${book.title}')">
+                    <i class="fas fa-book-open"></i> ${langData.description}
+                </button>
+            `;
+            bookList.appendChild(bookItem);
+        });
+    } else {
+        bookList.innerHTML = `<p>${langData.noBooksFound}</p>`;
+    }
+}
+
+
+ // Tìm kiếm sách
+ async function searchBooks() {
+   const lang = document.getElementById('language-select').value; // Ngôn ngữ hiện tại
+   const langData = translations[lang]; // Dữ liệu ngôn ngữ
+
+   const title = document.getElementById('search-input').value;
+
+   if (title.length > 0) {
+       const response = await fetch(`/admin/search?title=${title}`);
+       const books = await response.json();
+
+       const bookList = document.getElementById('book-list');
+       bookList.innerHTML = '';
+
+       if (books.length > 0) {
+           books.forEach(book => {
+               const bookItem = document.createElement('div');
+               bookItem.classList.add('book-item');
+               bookItem.innerHTML = `
+                  <img src="${book.image}" alt="${book.title}" loading="lazy">
+
+                   <h3>${book.title}</h3>
+                   <p><b>ID:</b> ${book.id}</p>
+                   <p><b>${langData.author}:</b> ${book.author}</p>
+                   <p><b>${langData.views}:</b> ${book.viewers}</p>
+                   <button onclick="openBorrowModal(${book.id})">
+                     ${langData.borrow}
+                   </button>
+                   <button onclick="viewDescription('${book.title}')">
+                     ${langData.description}
+                   </button>
+               `;
+               bookList.appendChild(bookItem);
+           });
+       } else {
+           bookList.innerHTML = `<p>${langData.noBooksFound}</p>`;
+       }
+   } else {
+       loadBooks();
+   }
+}
+
+// Hàm chuyển hướng đến trang đăng nhập/đăng ký
+function redirectToLogin() {
+    window.location.href = "/login.html";
+}
+
+// Xử lý logic cho nút Borrow
+function openBorrowModal(bookId) {
+    const isLoggedIn = false; // Kiểm tra trạng thái đăng nhập, mặc định là chưa đăng nhập
+    const selectedLang = document.getElementById("language-select").value; // Lấy ngôn ngữ hiện tại
+    const langData = translations[selectedLang]; // Lấy dữ liệu ngôn ngữ tương ứng
+
+    if (!isLoggedIn) {
+        alert(langData.loginRequired); // Hiển thị thông báo bằng ngôn ngữ đã chọn
+        redirectToLogin();
+    } else {
+        document.getElementById('borrow-book_id').value = bookId;
+        document.getElementById('borrow-modal').style.display = 'flex';
+    }
+}
+
+const translations = {
+  en: {
+    header: "Library Guest",
+    searchPlaceholder: "Search books by title...",
+    categoryPlaceholder: "-- Select Category --",
+    borrowBook: "Borrow Book",
+    bookDescription: "Book Description",
+    footer: "© 2024 Library. All rights reserved.",
+    login: "Login",
+    register: "Register",
+    author: "Author",
+    views: "Views",
+    borrow: "Borrow",
+    description: "Description",
+    noBooksFound: "No books found.",
+    borrowSuccess: "Book borrowed successfully.",
+    borrowFail: "Unable to borrow the book. Please try again later.",
+    borrowModalTitle: "Borrow Book",
+    borrowModalPlaceholder: "Book ID",
+    cancel: "Cancel",
+    closeDescription: "×",
+    loginRequired: "Log in before borrowing books",
+  },
+  vi: {
+    header: "TRANG THƯ VIỆN CHO KHÁCH",
+    searchPlaceholder: "Tìm sách theo tiêu đề...",
+    categoryPlaceholder: "-- Chọn Thể Loại --",
+    borrowBook: "Mượn Sách",
+    bookDescription: "Mô Tả Sách",
+    login: "Đăng nhập",
+    register: "Đăng ký",
+    author: "Tác giả",
+    views: "Lượt xem",
+    borrow: "Mượn",
+    description: "Mô tả",
+    noBooksFound: "Không tìm thấy sách.",
+    borrowSuccess: "Đã mượn sách thành công.",
+    borrowFail: "Không thể mượn sách. Vui lòng thử lại sau.",
+    borrowModalTitle: "Mượn Sách",
+    borrowModalPlaceholder: "Mã Sách",
+    cancel: "Hủy",
+    closeDescription: "×",
+    loginRequired: "Đăng nhập trước khi mượn sách",
+  },
+};
+
+function changeLanguage() {
+  const selectedLang = document.getElementById("language-select").value;
+  const langData = translations[selectedLang];
+
+  // Cập nhật nội dung
+  document.querySelector(".logo-text").textContent = langData.header;
+  document.getElementById("search-input").placeholder = langData.searchPlaceholder;
+  document.getElementById("category-select").options[0].text = langData.categoryPlaceholder;
+
+  // Cập nhật các nút
+  const buttons = document.querySelectorAll(".right-menu button");
+  buttons[0].textContent = langData.login;
+  buttons[1].textContent = langData.register;
+
+  // Cập nhật modal mượn sách
+  document.querySelector("#borrow-modal h3").textContent = langData.borrowModalTitle;
+  document.getElementById("borrow-book_id").placeholder = langData.borrowModalPlaceholder;
+  const borrowModalButtons = document.querySelectorAll("#borrow-modal button");
+  borrowModalButtons[0].textContent = langData.borrow;
+  borrowModalButtons[1].textContent = langData.cancel;
+
+  // Cập nhật panel mô tả sách
+  document.querySelector("#description-panel h3").textContent = langData.bookDescription;
+  const closeBtn = document.querySelector("#description-panel .close-btn");
+  closeBtn.textContent = langData.closeDescription;
+
+  // Cập nhật danh sách sách và thể loại
+  loadBooks();
+  loadCategories();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Đặt ngôn ngữ mặc định là English
+  document.getElementById("language-select").value = "en";
+  changeLanguage();
+});
+
+
+ // Tải danh sách sách khi trang được tải
+ document.addEventListener('DOMContentLoaded', loadBooks);
+
+</script>
+</body>
+</html>

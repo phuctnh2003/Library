@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <title>NEOSOFT LIBRARY</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+c
+    }
+ .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Căn giữa nội dung của header theo chiều dọc */
+    width: 100%;
+    padding: 4px;
+    background-color: #2c3e50;
+    color: white;
+    height: 80px; /* Giới hạn chiều cao header */
+}
+
+.logo {
+    display: flex;
+    align-items: center; /* Căn giữa logo và chữ NEO-LIBRARY theo chiều dọc */
+    padding-left: 15px; /* Thêm padding trái để xích vào trong */
+    height: 100%; /* Đảm bảo logo không làm tăng chiều cao header */
+}
+
+.logo img {
+    width: 250px; /* Đặt chiều rộng logo */
+    height: auto; /* Giữ tỷ lệ của logo */
+    max-height: 300px; /* Giới hạn chiều cao của logo */
+ margin-right: 400px;
+}
+.logo-text {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+   .search-bar {
+  margin: 20px 0;
+  display: flex;
+  align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+  justify-content: center;
+}
+
+.search-bar input {
+  padding: 10px;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.search-bar button {
+  margin-left: 10px; /* Khoảng cách giữa các button */
+  padding: 10px 20px;
+  border: none;
+  background-color: #27ae60;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.search-bar button:hover {
+  background-color: #2ecc71;
+}
+
+    .right-menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Căn phải các phần tử trong .right-menu */
+    padding-right: 20px; /* Thêm khoảng cách nhỏ từ bên phải để giữ khoảng cách */
+}
+
+.right-menu button, .right-menu img {
+    margin-left: 15px; /* Giảm margin-left giữa các phần tử */
+}
+
+.logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.user-icon {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+    .user-info {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 20px;
+        background: white;
+        color: black;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 200px;
+    }
+    .book-list {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 80%;
+        margin-bottom: 20px;
+    }
+    .book-item {
+        width: 200px;
+        margin: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 15px;
+    }
+    .book-item img {
+        width: 100px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    /* Modal style */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    .modal-content {
+        background: white;
+        padding: 20px;
+        width: 400px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .modal-content input {
+        width: 100%;
+        margin: 10px 0;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .modal-content button {
+        background-color: #27ae60;
+        color: white;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .modal-content button.cancel {
+        background-color: #e74c3c;
+    }
+    /* Panel mô tả */
+    .description-panel {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #f9f9f9;
+        padding: 20px;
+        width: 80%;
+        max-width: 600px;
+        height: 300px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        overflow-y: auto; /* Scrollable content */
+        background-color: #fff; /* Light background color */
+        border: 1px solid #ddd; /* Soft border */
+    }
+
+    .description-panel .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #e74c3c;
+        cursor: pointer;
+        background: none;
+        border: none;
+    }
+
+    .description-panel h3 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    .description-panel p {
+        color: #666;
+        line-height: 1.5;
+    }
+/* Điều chỉnh màu tiêu đề modal */
+.modal-content h3 {
+  text-align: center;
+  color: #ffffff;
+  font-size: 18px;
+  background-color: #34495e; /* Màu tối nổi bật */
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
+  margin: 0;
+}
+
+/* Điều chỉnh bảng */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 14px; /* Giảm kích thước font */
+  text-align: left;
+  color: #333; /* Tăng độ tương phản */
+}
+
+table thead {
+  background-color: #2c3e50;
+  color: #fff;
+}
+
+table th, table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tbody tr:hover {
+  background-color: #e8f8f5;
+}
+
+/* Nút Lock/Unlock nhỏ gọn hơn */
+table button {
+  padding: 5px 8px;
+  font-size: 12px;
+  color: white;
+  background-color: #28a745; /* Màu xanh cho Lock */
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+table button:hover {
+  background-color: #218838; /* Màu đậm hơn khi hover */
+}
+
+/* Nút Unlock */
+table button.unlock {
+  background-color: #e74c3c; /* Đổi màu đỏ cho Unlock */
+}
+
+table button.unlock:hover {
+  background-color: #c0392b; /* Màu đậm hơn khi hover */
+}
+
+/* Căn chỉnh modal */
+.modal-content {
+  position: fixed; /* Thay đổi từ relative sang fixed để modal luôn ở giữa màn hình */
+  top: 50%;
+  left: 50%; /* Căn giữa theo chiều ngang */
+  transform: translate(-50%, -50%); /* Căn giữa cả chiều ngang và chiều dọc */
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Nút Close */
+button.cancel {
+  margin-top: 15px;
+  width: 100%;
+  text-align: center;
+  background-color: #e74c3c;
+  padding: 10px;
+  font-size: 14px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.cancel:hover {
+  background-color: #c0392b;
+}
+  footer {
+        background-color: #34495e;
+        color: white;
+        padding: 3px;
+        text-align: center;
+        font-size: 13px;
+        width: 100%;
+        position: fixed;
+        bottom: 0; /* Giữ footer ở dưới cùng */
+        left: 0; /* Đảm bảo footer phủ rộng toàn bộ màn hình */
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <img src="/NEOSOFT-LOGO-LIB.png" alt="NEO-LIBRARY">
+    <span class="logo-text">ADMIN DASHBOARD</span>
+  </div>
+  <div class="right-menu">
+    <button class="logout-btn" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+    <img src="/admin.png" alt="User Icon" class="user-icon" onclick="toggleUserInfo()">
+  </div>
+</div>
+<div class="search-bar">
+  <input type="text" id="search-input" placeholder="Search books by title..." oninput="searchBooks()">
+  <button onclick="showAddBookModal()"><i class="fas fa-plus-circle"></i> Add A Book</button>
+  <button onclick="showAddMultipleBooksModal()"><i class="fas fa-layer-group"></i> Add Books</button>
+  <button onclick="showUserList()"><i class="fas fa-users"></i> User List</button>
+  <button onclick="showBorrowReturnHistory()"><i class="fas fa-history"></i> Borrow/Return History</button>
+</div>
+
+<!-- Modal Danh sách người dùng -->
+<div id="user-list-modal" class="modal">
+  <div class="modal-content">
+    <h3>User List</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Phone</th>
+<!--        <th>Status</th>-->
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody id="user-list-table"></tbody>
+    </table>
+    <button class="cancel" onclick="closeUserListModal()">Close</button>
+  </div>
+</div>
+
+<!-- Modal Danh sách lịch sử mượn/trả -->
+<div id="borrow-return-history-modal" class="modal">
+  <div class="modal-content">
+    <h3>Borrow/Return History</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>Book ID</th>
+        <th>Borrow Date</th>
+        <th>Due Date</th>
+        <th>Return Date</th>
+      </tr>
+      </thead>
+      <tbody id="borrow-return-history-table"></tbody>
+    </table>
+    <button class="cancel" onclick="closeBorrowReturnHistoryModal()">Close</button>
+  </div>
+</div>
+
+<div class="user-info" id="user-info">
+  <p><b>Username:</b> <span id="username"></span></p>
+  <p><b>Name:</b> <span id="name"></span></p>
+  <p><b>Role:</b> <span id="role"></span></p>
+  <p><b>Phone:</b> <span id="phone"></span></p>
+</div>
+
+<div class="book-list" id="book-list">
+  <!-- Sách sẽ được load vào đây -->
+</div>
+
+<!-- Modal Thêm 1 Sách -->
+<div id="add-book-modal" class="modal">
+  <div class="modal-content">
+    <h3>Add A Book</h3>
+    <input type="text" id="add-title" placeholder="Tittle">
+    <input type="text" id="add-author" placeholder="Author">
+    <textarea id="add-description" placeholder="Describe" rows="4"></textarea>
+    <input type="number" id="add-quantity" placeholder="Quantity">
+    <input type="text" id="add-image" placeholder="URL image">
+    <button onclick="saveAddBook()">Save</button>
+    <button class="cancel" onclick="closeAddBookModal()">Cancel</button>
+  </div>
+</div>
+<!-- Modal Thêm Nhiều Sách -->
+<div id="add-multiple-books-modal" class="modal">
+  <div class="modal-content">
+    <h3>Add Books</h3>
+    <input type="text" id="add-keyword" placeholder="Enter book topic....">
+    <input type="number" id="add-quantity-res" placeholder="Quantity">
+    <button onclick="saveAddMultipleBooks()">Save</button>
+    <button class="cancel" onclick="closeAddMultipleBooksModal()">Cancel</button>
+  </div>
+</div>
+
+
+<!-- Modal chỉnh sửa sách -->
+<div id="edit-modal" class="modal">
+  <div class="modal-content">
+    <h3>Edit Book</h3>
+    <input type="text" id="edit-title" placeholder="Title">
+    <input type="text" id="edit-author" placeholder="Author">
+    <textarea id="edit-description" placeholder="Description" rows="4"></textarea>
+    <input type="number" id="edit-quantity" placeholder="Quantity">
+    <input type="text" id="edit-image" placeholder="Image URL">
+    <button onclick="saveEdit()">Save</button>
+    <button class="cancel" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- Panel Mô tả Sách -->
+<div id="description-panel" class="description-panel">
+  <button class="close-btn" onclick="closeDescriptionPanel()">×</button>
+  <h3>Book Description</h3>
+  <p id="book-description"></p>
+</div>
+<footer>
+  <p>© 2024 Neosoft Teams. All rights reserved.</p>
+</footer>
+<script>
+  let currentBookTitle = ""; // Variable to store the title of the book being edited
+
+  // Load sách khi vào trang
+  async function loadBooks() {
+      const response = await fetch('/admin/show');
+      const books = await response.json();
+
+      const bookList = document.getElementById('book-list');
+      bookList.innerHTML = ''; // Xóa danh sách cũ
+      books.forEach(book => {
+          const bookItem = document.createElement('div');
+          bookItem.classList.add('book-item');
+          bookItem.innerHTML = `
+              <img src="${book.image}" alt="${book.title}">
+              <h3>${book.title}</h3>
+              <p><b>Author:</b> ${book.author}</p>
+<!--              <p><b>Quantity:</b> ${book.quantity}</p>-->
+              <button class="action-button edit-button" onclick="editBook('${book.title}')">
+    <i class="fas fa-edit"></i> Edit
+</button>
+<button class="action-button description-button" onclick="viewDescription('${book.title}')">
+    <i class="fas fa-book-open"></i> Description
+</button>
+<button class="action-button delete-button" onclick="deleteBook('${book.title}')">
+    <i class="fas fa-trash-alt"></i> Delete
+</button>
+          `;
+          bookList.appendChild(bookItem);
+      });
+  }
+async function searchBooks() {
+    const title = document.getElementById('search-input').value;
+
+    if (title.length > 0) {
+        const response = await fetch(`/admin/search?title=${title}`);
+        const books = await response.json();
+
+        // Hiển thị kết quả tìm kiếm
+        const bookList = document.getElementById('book-list');
+        bookList.innerHTML = ''; // Xóa danh sách cũ
+
+        // Nếu có sách tìm thấy, hiển thị
+        if (books.length > 0) {
+            books.forEach(book => {
+                const bookItem = document.createElement('div');
+                bookItem.classList.add('book-item');
+                bookItem.innerHTML = `
+                    <img src="${book.image}" alt="${book.title}">
+                    <h3>${book.title}</h3>
+                    <p><b>Author:</b> ${book.author}</p>
+<!--                    <p><b>Quantity:</b> ${book.quantity}</p>-->
+                    <button onclick="editBook('${book.title}')">Edit</button>
+                    <button onclick="viewDescription('${book.title}')">Description</button>
+                    <button onclick="deleteBook('${book.title}')">Delete</button>
+                `;
+                bookList.appendChild(bookItem);
+            });
+        } else {
+            bookList.innerHTML = `<p>No books found with that title.</p>`;
+        }
+    } else {
+        // Nếu không có từ khóa tìm kiếm, hiển thị lại danh sách sách đầy đủ
+        loadBooks();
+    }
+}
+  // Hiển thị mô tả sách trong panel
+  function viewDescription(title) {
+      fetch(`/admin/search?title=${title}`)
+        .then(response => response.json())
+        .then(book => {
+            document.getElementById('book-description').innerText = book[0].description;
+            document.getElementById('description-panel').style.display = 'block';
+        });
+  }
+
+  // Đóng panel mô tả sách
+  function closeDescriptionPanel() {
+      document.getElementById('description-panel').style.display = 'none';
+  }
+
+  // Hiển thị modal chỉnh sửa sách
+  function editBook(title) {
+      currentBookTitle = title; // Lưu lại tên sách cần chỉnh sửa
+
+      // Lấy thông tin sách và điền vào modal
+      fetch(`/admin/search?title=${title}`)
+        .then(response => response.json())
+        .then(book => {
+            document.getElementById('edit-title').value = book[0].title;
+            document.getElementById('edit-author').value = book[0].author;
+            document.getElementById('edit-description').value = book[0].description;
+            document.getElementById('edit-quantity').value = book[0].quantity;
+            document.getElementById('edit-image').value = book[0].image;
+
+            document.getElementById('edit-modal').style.display = 'flex';
+        });
+  }
+
+  // Lưu chỉnh sửa và gửi đến server
+  async function saveEdit() {
+      const newTitle = document.getElementById('edit-title').value;
+      const newAuthor = document.getElementById('edit-author').value;
+      const newDescription = document.getElementById('edit-description').value;
+      const newQuantity = document.getElementById('edit-quantity').value;
+      const newImage = document.getElementById('edit-image').value;
+
+      const response = await fetch('/admin/edit', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+              title: currentBookTitle,
+              newTitle,
+              newAuthor,
+              newDes: newDescription,
+              newQuantity,
+              newImage
+          })
+      });
+
+      if (await response.text() === '200') {
+          alert('Book updated successfully');
+          closeModal(); // Close the modal
+          loadBooks(); // Reload books
+      } else {
+          alert('Failed to update book');
+      }
+  }
+
+  // Đóng modal
+  function closeModal() {
+      document.getElementById('edit-modal').style.display = 'none';
+  }
+
+  // Hàm xóa sách
+  async function deleteBook(title) {
+      const response = await fetch('/admin/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ title })
+      });
+      if (await response.text() === '200') {
+          alert('Book deleted successfully');
+          loadBooks(); // Load lại danh sách sau khi xóa
+      } else {
+          alert('Failed to delete book');
+      }
+  }
+
+async function saveAddBook() {
+    const title = document.getElementById('add-title').value;
+    const author = document.getElementById('add-author').value;
+    const description = document.getElementById('add-description').value;
+    const quantity = document.getElementById('add-quantity').value;
+    const image = document.getElementById('add-image').value;
+
+    const response = await fetch('/admin/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            title,
+            author,
+            description,
+            quantity,
+            image
+        })
+    });
+
+    if (await response.text() === '200') {
+        alert('Sách đã được thêm');
+        closeAddBookModal(); // Đóng modal
+        loadBooks(); // Tải lại danh sách sách
+    } else {
+        alert('Thêm sách thất bại');
+    }
+}
+async function saveAddMultipleBooks() {
+    const keyword = document.getElementById('add-keyword').value;
+    const quantity_res = document.getElementById('add-quantity-res').value;
+
+    const response = await fetch('/admin/adds', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            keyword,
+            quantity_res
+        })
+    });
+
+    if (await response.text() === '200') {
+        alert('Nhiều sách đã được thêm');
+        closeAddMultipleBooksModal(); // Đóng modal
+        loadBooks(); // Tải lại danh sách sách
+    } else {
+        alert('Thêm sách thất bại');
+    }
+}
+
+
+// Mở modal thêm một sách
+function showAddBookModal() {
+    document.getElementById('add-book-modal').style.display = 'flex';
+}
+
+// Mở modal thêm nhiều sách
+function showAddMultipleBooksModal() {
+    document.getElementById('add-multiple-books-modal').style.display = 'flex';
+}
+
+// Đóng modal thêm một sách
+function closeAddBookModal() {
+    document.getElementById('add-book-modal').style.display = 'none';
+}
+
+// Đóng modal thêm nhiều sách
+function closeAddMultipleBooksModal() {
+    document.getElementById('add-multiple-books-modal').style.display = 'none';
+}
+// Hàm mở modal khóa tài khoản
+function showLockAccountModal() {
+    document.getElementById('lock-account-modal').style.display = 'flex';
+}
+
+// Hàm đóng modal khóa tài khoản
+function closeLockAccountModal() {
+    document.getElementById('lock-account-modal').style.display = 'none';
+}
+
+
+// Hàm gửi yêu cầu khóa hoặc mở khóa tài khoản
+async function manageAccount(action) {
+    const username = document.getElementById('account-username').value;
+
+    if (username.trim() === "") {
+        alert("Please enter a username.");
+        return;
+    }
+
+    // Gửi yêu cầu kiểm tra trạng thái tài khoản trước
+    const response = await fetch(`/admin/account-action?username=${username}&action=${action}`, {
+        method: 'GET'
+    });
+    const result = await response.text();
+
+    if (result === "404") {
+        alert("Account not found.");
+    } else if (result === "403") {
+        if (action === "LOCK") {
+            alert("This account is already locked.");
+        } else if (action === "UNLOCK") {
+            alert("This account is already unlocked.");
+        }
+    } else if (result === "200") {
+        alert(`${action === "LOCK" ? "Account locked successfully" : "Account unlocked successfully"}`);
+        closeLockAccountModal(); // Đóng modal
+    } else {
+        alert("An error occurred. Please try again.");
+    }
+}
+
+async function showUserList() {
+    const response = await fetch('/admin/user-list');
+    const users = await response.json();
+
+    const userTable = document.getElementById('user-list-table');
+    userTable.innerHTML = ''; // Xóa danh sách cũ
+
+    users.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${user.username}</td>
+            <td>${user.name}</td>
+            <td>${user.phone}</td>
+<!--            <td>${user.status}</td>-->
+           <td>
+    <button class="lock" onclick="lockUnlockAccount('${user.username}', 'lock')">Lock</button>
+    <button class="unlock" onclick="lockUnlockAccount('${user.username}', 'unlock')">Unlock</button>
+</td>
+
+        `;
+        userTable.appendChild(row);
+    });
+
+    document.getElementById('user-list-modal').style.display = 'flex';
+}
+
+function closeUserListModal() {
+    document.getElementById('user-list-modal').style.display = 'none';
+}
+
+async function lockUnlockAccount(username, action) {
+    const response = await fetch(`/admin/account-action?username=${username}&action=${action}`);
+    if (await response.text() === '200') {
+        alert(`${action === 'lock' ? 'Locked' : 'Unlocked'} account successfully`);
+        showUserList(); // Tải lại danh sách người dùng
+    } else {
+        alert('Failed to perform action');
+    }
+}
+async function showBorrowReturnHistory() {
+    const response = await fetch('/admin/history');
+    const history = await response.json();
+
+    const historyTable = document.getElementById('borrow-return-history-table');
+    historyTable.innerHTML = ''; // Xóa danh sách cũ
+
+    history.forEach(record => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+<!--            <td>${record.id}</td>-->
+            <td>${record.username}</td>
+            <td>${record.bookId}</td>
+            <td>${record.borrowDate}</td>
+            <td>${record.dueDate}</td>
+            <td>${record.returnDate ? record.returnDate : 'Not returned yet'}</td>
+        `;
+        historyTable.appendChild(row);
+    });
+
+    document.getElementById('borrow-return-history-modal').style.display = 'flex';
+}
+
+function closeBorrowReturnHistoryModal() {
+    document.getElementById('borrow-return-history-modal').style.display = 'none';
+}
+
+  // Đăng xuất
+  function logout() {
+      sessionStorage.clear();
+      window.location.href = '/login.html';
+  }
+
+  // Hiển thị thông tin người dùng
+  function toggleUserInfo() {
+      const userInfo = document.getElementById('user-info');
+      if (userInfo.style.display === 'none' || userInfo.style.display === '') {
+          document.getElementById('username').innerText = sessionStorage.getItem('username');
+          document.getElementById('name').innerText = sessionStorage.getItem('name');
+          document.getElementById('role').innerText = sessionStorage.getItem('role');
+          document.getElementById('phone').innerText = sessionStorage.getItem('phone');
+          userInfo.style.display = 'block';
+      } else {
+          userInfo.style.display = 'none';
+      }
+  }
+
+  // Gọi hàm loadBooks khi tải trang
+  loadBooks();
+</script>
+</body>
+</html>
